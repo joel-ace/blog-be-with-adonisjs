@@ -17,6 +17,9 @@ const Route = use('Route')
 
 Route.group(() => {
   Route.resource('users', 'UserController')
-  .apiOnly()
+    .apiOnly()
+
+  Route.post('auth/login', 'UserController.login')
+
 }).prefix('api')
 
