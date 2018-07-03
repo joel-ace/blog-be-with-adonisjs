@@ -24,7 +24,7 @@ class UserController {
     const newUser = await User.findBy('email', email)
     verifyRegisteredUser(newUser, 'an account with this email already exists')
 
-    const user = await User.create({
+    await User.create({
       email,
       full_name,
       password,
@@ -32,7 +32,14 @@ class UserController {
       username: email,
     });
 
-    return user;
+    return this.login(...arguments)
+  }
+
+  async login({ request, auth }) {
+    const { email, password } = request.all()
+    const token = await auth.attempt(email, password)
+
+    return token
   }
 
 }
