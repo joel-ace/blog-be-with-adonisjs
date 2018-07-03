@@ -15,6 +15,8 @@
 
 const Route = use('Route')
 
-Route.get('/', ({ request }) => {
-  return { greeting: 'Hello world in JSON' }
-})
+Route.group(() => {
+  Route.resource('users', 'UserController')
+  .apiOnly()
+}).prefix('api')
+
