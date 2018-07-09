@@ -2,7 +2,7 @@
 
 const User = use('App/Models/User')
 const { validateAll } = use('Validator')
-const { returnValidationErrors, verifyRegisteredUser } = use('App/Services/HelperService')
+const HelperService = use('App/Services/HelperService')
 
 
 
@@ -19,10 +19,10 @@ class UserController {
       auth_type: 'in:facebook,twitter',
     })
 
-    returnValidationErrors(validation, response)
+    HelperService.returnValidationErrors(validation, response)
 
     const newUser = await User.findBy('email', email)
-    verifyRegisteredUser(newUser, 'an account with this email already exists')
+    HelperService.verifyRegisteredUser(newUser, 'an account with this email already exists')
 
     await User.create({
       email,
@@ -41,6 +41,21 @@ class UserController {
 
     return token
   }
+
+  async destroy({ auth, params }) {
+    const currentUser = await auth.getUser();
+    const user = await User.find(params.id);
+
+    HelperService.verifyUserPermission(user, currentUser, 'user does not exist or has been previously deleted')
+
+    await user.delete();
+
+    return {
+      user,
+      message: 'user deleted successfully'
+    };
+  }
+
 
 }
 

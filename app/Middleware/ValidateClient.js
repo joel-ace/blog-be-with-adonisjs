@@ -4,10 +4,11 @@ class ValidateClient {
   async handle ({ request, response }, next) {
     // call next to advance the request
 
+    const acceptedClient = ['ah-web-client', 'ah-web-mobile']
     const clientApp = request.header('afrodophile-client')
 
-    if (clientApp && ['ah-web-client'].includes(clientApp)) {
-      await next()
+    if (clientApp && acceptedClient.includes(clientApp)) {
+      return await next()
     }
 
     return response.status(400).json({
