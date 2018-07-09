@@ -42,6 +42,16 @@ class UserController {
     return token
   }
 
+  async show({ auth, params}) {
+    const currentUser = await auth.getUser();
+    const user = await User.find(params.id);
+
+    HelperService.verifyUserPermission(user, currentUser, 'user does not exist or has been previously deleted')
+
+    return { user }
+  }
+
+
   async destroy({ auth, params }) {
     const currentUser = await auth.getUser();
     const user = await User.find(params.id);
