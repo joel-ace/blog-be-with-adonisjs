@@ -12,6 +12,7 @@ class UserSchema extends Schema {
       table.string('password', 60).notNullable()
       table.string('strategy', 60).notNullable().defaultTo('local')
       table.string('account_type', 255).defaultTo('user')
+      table.string('account_status', 200).notNullable()
       table.timestamps()
     })
   }

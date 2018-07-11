@@ -20,6 +20,9 @@ Route.group(() => {
     .apiOnly()
 
   Route.post('auth/login', 'UserController.login')
-
+  Route.post('auth/verify-email/:token', 'UserController.verifyEmail')
+  Route.post('auth/change-password', 'UserController.updatePassword')
+  Route.post('auth/forgot-password', 'UserController.forgotPassword')
+  Route.post('auth/reset-password/:token', 'UserController.updatePasswordByToken')
 }).prefix('api')
 

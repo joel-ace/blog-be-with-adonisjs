@@ -2,8 +2,9 @@ const ValidationErrorException = use('App/Exceptions/ValidationErrorException')
 const UserExistException = use('App/Exceptions/UserExistException')
 const ResourceNotExistException = use('App/Exceptions/ResourceNotExistException')
 const InvalidAccessException = use('App/Exceptions/InvalidAccessException')
+const { validateAll } = use('Validator')
 
-class AuthorizationService {
+class HelperService {
   verifyRegisteredUser(user, message) {
     if (user)  {
       throw new UserExistException(message)
@@ -11,6 +12,14 @@ class AuthorizationService {
   }
 
   returnValidationErrors(validation, response) {
+    if(validation.fails()) {
+      throw new ValidationErrorException(validation.messages())
+    }
+  }
+
+  async validateInput(validationRules, validationFields, response) {
+    const validation = await validateAll(validationFields, validationRules)
+
     if(validation.fails()) {
       throw new ValidationErrorException(validation.messages())
     }
@@ -31,4 +40,4 @@ class AuthorizationService {
   }
 }
 
-module.exports = new AuthorizationService()
+module.exports = new HelperService()
