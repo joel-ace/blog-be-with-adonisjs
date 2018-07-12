@@ -26,3 +26,8 @@ Route.group(() => {
   Route.post('auth/reset-password/:token', 'UserController.updatePasswordByToken')
 }).prefix('api')
 
+//Just to test email template views
+//DELETE WHEN DONE
+Route.get('temp', ({ view }) => view.render('email.passwordchanged'))
+
+

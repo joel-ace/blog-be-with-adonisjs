@@ -28,10 +28,10 @@ module.exports = {
     port: 2525,
     host: Env.get('MAIL_HOST'),
     secure: false,
-    auth: {
-      user: Env.get('MAIL_USERNAME'),
-      pass: Env.get('MAIL_PASSWORD')
-    },
+    // auth: {
+    //   user: Env.get('MAIL_USERNAME'),
+    //   pass: Env.get('MAIL_PASSWORD')
+    // },
     maxConnections: 5,
     maxMessages: 100,
     rateLimit: 10

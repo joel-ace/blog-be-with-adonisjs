@@ -1,11 +1,10 @@
 'use strict'
 
 const User = use('App/Models/User')
-const { validateAll } = use('Validator')
 const Persona = use('Persona')
+const querystring = use('querystring');
+
 const HelperService = use('App/Services/HelperService')
-
-
 
 class UserController {
   async store({ request, response }) {
@@ -37,19 +36,38 @@ class UserController {
     return this.login(...arguments)
   }
 
-  async verifyEmail ({ params }) {
-    const user = await Persona.verifyEmail(params.token)
+  async verifyEmail ({ params, response }) {
+    const validationRules = {
+      token: 'required',
+    }
+
+    await HelperService.validateInput(validationRules, params, response)
+
+    const user = await Persona.verifyEmail(querystring.unescape(params.token))
     return user
   }
 
-  async login({ request, auth }) {
+  async login({ request, auth, response }) {
+    const validationRules = {
+      email: 'required|email',
+      password: 'required|min:6',
+    }
+
+    await HelperService.validateInput(validationRules, request.only(['email', 'password']), response)
+
     const { email, password } = request.all()
     const token = await auth.attempt(email, password)
 
     return token
   }
 
-  async show({ auth, params}) {
+  async show({ auth, params, response }) {
+    const validationRules = {
+      id: 'required|integer',
+    }
+
+    await HelperService.validateInput(validationRules, params, response)
+
     const currentUser = await auth.getUser();
     const user = await User.find(params.id);
 
@@ -124,7 +142,7 @@ class UserController {
   }
 
   async updatePasswordByToken ({ request, params }) {
-    const { token } = params
+    const token = querystring.unescape(params.token)
     const payload = request.only(['password', 'password_confirmation'])
 
     const validationRules = {
