@@ -19,6 +19,17 @@ Route.group(() => {
   Route.resource('users', 'UserController')
     .apiOnly()
 
+  Route.resource('category', 'CategoryController')
+    .only(['index', 'update', 'destroy', 'store'])
+    .middleware(['adminOnly'])
+
+  // Category
+  // Route.get('category', 'CategoryController.index').middleware(['adminOnly'])
+  // Route.post('category', 'CategoryController.store').middleware(['adminOnly'])
+  // Route.patch('category/:id', 'CategoryController.update').middleware(['adminOnly'])
+  // Route.delete('category/:id', 'CategoryController.destroy').middleware(['adminOnly'])
+
+  // Authentication
   Route.post('auth/login', 'UserController.login')
   Route.post('auth/verify-email/:token', 'UserController.verifyEmail')
   Route.post('auth/change-password', 'UserController.updatePassword')

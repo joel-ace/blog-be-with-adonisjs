@@ -20,6 +20,7 @@ const providers = [
   '@adonisjs/persona/providers/PersonaProvider',
   '@adonisjs/mail/providers/MailProvider',
   '@adonisjs/framework/providers/ViewProvider',
+  '@adonisjs/lucid-slugify/providers/SlugifyProvider',
 ]
 
 /*
