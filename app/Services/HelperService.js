@@ -3,7 +3,7 @@ const Mail = use('Mail')
 const Env = use('Env')
 
 const ValidationErrorException = use('App/Exceptions/ValidationErrorException')
-const UserExistException = use('App/Exceptions/UserExistException')
+const ResourceExistsException = use('App/Exceptions/ResourceExistsException')
 const ResourceNotExistException = use('App/Exceptions/ResourceNotExistException')
 const InvalidAccessException = use('App/Exceptions/InvalidAccessException')
 const UserNotAdminException = use('App/Exceptions/UserNotAdminException')
@@ -12,15 +12,21 @@ const appName = Env.get('APP_NAME')
 const appURL = Env.get('APP_URL')
 
 class HelperService {
-  verifyRegisteredUser(user, message) {
+  resourceExists(user, message) {
     if (user)  {
-      throw new UserExistException(message)
+      throw new ResourceExistsException(message)
     }
   }
 
   handleResourceNotExist(resource, message) {
     if (!resource)  {
       throw new ResourceNotExistException(message)
+    }
+  }
+
+  verifyUserOwn(resourceID, userID) {
+    if (userID !== resourceID) {
+      throw new InvalidAccessException('only the resource owner can access this resource')
     }
   }
 

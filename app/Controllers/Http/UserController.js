@@ -7,6 +7,15 @@ const querystring = use('querystring');
 const HelperService = use('App/Services/HelperService')
 
 class UserController {
+  async index({ request }) {
+    const page = parseInt(request.get().page)
+    const limit = parseInt(request.get().limit)
+
+    const users = await User.query().paginate(page || 1, limit || 20)
+
+    return users
+  }
+
   async store({ request, response }) {
     const { email, full_name, password, password_confirmation, auth_type } = request.all()
 
@@ -21,8 +30,8 @@ class UserController {
 
     await HelperService.validateInput(validationRules, request.all(), response)
 
-    const newUser = await User.findBy('email', email)
-    HelperService.verifyRegisteredUser(newUser, 'an account with this email already exists')
+    const newUser = await User.findBy('email', email.toLowerCase())
+    HelperService.resourceExists(newUser, 'an account with this email already exists')
 
     await Persona.register({
       email,
@@ -61,23 +70,13 @@ class UserController {
     return token
   }
 
-  async show({ auth, params, response }) {
-    const validationRules = {
-      id: 'required|integer',
-    }
-
-    await HelperService.validateInput(validationRules, params, response)
-
-    const currentUser = await auth.getUser();
-    const user = await User.find(params.id);
-
-    HelperService.verifyUserPermission(user, currentUser, 'user does not exist or has been previously deleted')
+  async show({ request }) {
+    const user = request.post().user
 
     return { user }
   }
 
-  async update({ auth, request, response, params }) {
-    const currentUser = await auth.getUser()
+  async update({ request, response }) {
     const payload = request.only(['full_name', 'email'])
 
     const validationRules = {
@@ -87,12 +86,11 @@ class UserController {
 
     await HelperService.validateInput(validationRules, payload, response)
 
-    const user = await User.find(params.id)
-    HelperService.verifyUserPermission(user, currentUser, 'user does not exist or has been previously deleted')
+    const user = request.post().user
 
     if (payload.email) {
-        const verifyEmailUser = await User.findBy('email', payload.email)
-        HelperService.verifyRegisteredUser(verifyEmailUser, 'an account with this email already exists')
+        const verifyEmailUser = await User.findBy('email', payload.email.toLowerCase())
+        HelperService.resourceExists(verifyEmailUser, 'an account with this email already exists')
     }
 
     await Persona.updateProfile(user, payload)
@@ -100,7 +98,7 @@ class UserController {
     return { user, message: 'user successfully updated'}
   }
 
-  async updatePassword ({ request, response, auth }) {
+  async updatePassword ({ request, response, auth, params }) {
     const payload = request.only(['old_password', 'password', 'password_confirmation'])
     const currentUser = await auth.getUser()
 
@@ -111,10 +109,12 @@ class UserController {
 
     await HelperService.validateInput(validationRules, payload, response)
 
-    const user = await User.find(currentUser.id);
-    HelperService.verifyUserPermission(user, currentUser, 'user does not exist or has been previously deleted')
+    const user = await User.find(params.id);
 
-    await Persona.updatePassword(user, payload)
+    HelperService.handleResourceNotExist(user, 'user does not exist or has been previously deleted')
+    HelperService.verifyUserOwn(user.id, currentUser.id)
+
+    const joel = await Persona.updatePassword(user, payload)
 
     return { user, message: 'password successfully changed'}
   }
@@ -128,7 +128,7 @@ class UserController {
 
     await HelperService.validateInput(validationRules, email, response)
 
-    const verifyEmailUser = await User.findBy('email', email)
+    const verifyEmailUser = await User.findBy('email', email.toLowerCase())
 
     if (!verifyEmailUser) {
       return response.status(404).json({
@@ -156,18 +156,15 @@ class UserController {
     return { message: 'password reset was successful' }
   }
 
-  async destroy({ auth, params }) {
-    const currentUser = await auth.getUser();
-    const user = await User.find(params.id);
-
-    HelperService.verifyUserPermission(user, currentUser, 'user does not exist or has been previously deleted')
+  async destroy({ request }) {
+    const user = request.post().user
 
     await user.delete();
 
     return {
       user,
       message: 'user deleted successfully'
-    };
+    }
   }
 
 

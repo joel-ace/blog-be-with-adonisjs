@@ -32,6 +32,10 @@ class User extends Model {
     return this.hasMany('App/Models/Token')
   }
 
+  setEmail (email) {
+    return email.toLowerCase()
+  }
+
   static get hidden() {
     return ['password', 'username'];
   }

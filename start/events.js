@@ -4,7 +4,6 @@ const querystring = use('querystring');
 const HelperService = use('App/Services/HelperService')
 
 Event.on('user::created', async (payload) => {
-  console.log((new Date()).getFullYear())
   const { user, token } = payload;
   const userToken = querystring.escape(token)
 
