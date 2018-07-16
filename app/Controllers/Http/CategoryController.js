@@ -26,7 +26,17 @@ class CategoryController {
   async update () {
   }
 
-  async destroy ({ auth, params }) {
+  async destroy ({ params }) {
+    const category = await Category.find(params.id);
+
+    HelperService.handleResourceNotExist(category, 'category does not exist or has been previously deleted')
+
+    await category.delete();
+
+    return {
+      category,
+      message: 'category deleted successfully'
+    };
   }
 }
 
