@@ -37,6 +37,7 @@ const namedMiddleware = {
   auth: 'Adonis/Middleware/Auth',
   adminOnly: 'App/Middleware/AdminOnly',
   findCategory: 'App/Middleware/FindCategory',
+  findTag: 'App/Middleware/FindTag',
   findUser: 'App/Middleware/FindUSer',
   isAdminOrUserOwn: 'App/Middleware/IsAdminOrUserOwn',
 }

@@ -16,19 +16,12 @@
 const Route = use('Route')
 
 Route.group(() => {
-  Route.resource('users', 'UserController')
-    .apiOnly()
-    .middleware(new Map([
-      [['index', 'destroy'], ['adminOnly']],
-      [['destroy'], ['findUser']],
-      [['show', 'update'], ['isAdminOrUserOwn']],
-    ]))
-
-  // Category
-  Route.get('category', 'CategoryController.index')
-  Route.post('category', 'CategoryController.store').middleware(['adminOnly'])
-  Route.patch('category/:id', 'CategoryController.update').middleware(['adminOnly', 'findCategory'])
-  Route.delete('category/:id', 'CategoryController.destroy').middleware(['adminOnly', 'findCategory'])
+  // Users
+  Route.get('users', 'UserController.index').middleware(['adminOnly'])
+  Route.get('users/:id', 'UserController.show').middleware(['isAdminOrUserOwn'])
+  Route.post('users', 'UserController.store')
+  Route.patch('users/:id', 'UserController.update').middleware(['isAdminOrUserOwn'])
+  Route.delete('users/:id', 'UserController.destroy').middleware(['adminOnly', 'findUser'])
 
   // Authentication
   Route.post('auth/login', 'UserController.login')
@@ -36,6 +29,19 @@ Route.group(() => {
   Route.post('auth/change-password/:id', 'UserController.updatePassword')
   Route.post('auth/forgot-password', 'UserController.forgotPassword')
   Route.post('auth/reset-password/:token', 'UserController.updatePasswordByToken')
+
+  // Category
+  Route.get('category', 'CategoryController.index')
+  Route.post('category', 'CategoryController.store').middleware(['adminOnly'])
+  Route.patch('category/:id', 'CategoryController.update').middleware(['adminOnly', 'findCategory'])
+  Route.delete('category/:id', 'CategoryController.destroy').middleware(['adminOnly', 'findCategory'])
+
+  // Tags
+  Route.get('tag', 'TagController.index')
+  Route.post('tag', 'TagController.store').middleware(['adminOnly'])
+  Route.patch('tag/:id', 'TagController.update').middleware(['adminOnly', 'findTag'])
+  Route.delete('tag/:id', 'TagController.destroy').middleware(['adminOnly', 'findTag'])
+
 }).prefix('api')
 
 //Just to test email template views
