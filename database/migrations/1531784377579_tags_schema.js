@@ -7,6 +7,7 @@ class TagsSchema extends Schema {
     this.create('tags', (table) => {
       table.increments()
       table.string('title')
+      table.string('slug');
       table.timestamps()
     })
   }

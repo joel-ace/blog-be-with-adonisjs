@@ -18,6 +18,11 @@ class User extends Model {
     })
   }
 
+
+  static get hidden() {
+    return ['password', 'username'];
+  }
+
   /**
    * A relationship on tokens is required for auth to
    * work. Since features like `refreshTokens` or
@@ -36,9 +41,10 @@ class User extends Model {
     return email.toLowerCase()
   }
 
-  static get hidden() {
-    return ['password', 'username'];
+  posts () {
+    return this.hasMany('App/Models/Post')
   }
+
 }
 
 module.exports = User

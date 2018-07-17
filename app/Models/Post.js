@@ -2,7 +2,7 @@
 
 const Model = use('Model')
 
-class Tag extends Model {
+class Post extends Model {
   static boot () {
     super.boot()
 
@@ -15,9 +15,13 @@ class Tag extends Model {
     })
   }
 
-  setTitle (title) {
-    return title.toLowerCase()
+  user () {
+    return this.belongsTo('App/Models/User')
+  }
+
+  category () {
+    return this.belongsTo('App/Models/Category')
   }
 }
 
-module.exports = Tag
+module.exports = Post

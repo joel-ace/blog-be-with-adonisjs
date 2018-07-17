@@ -36,11 +36,14 @@ Route.group(() => {
   Route.patch('category/:id', 'CategoryController.update').middleware(['adminOnly', 'findCategory'])
   Route.delete('category/:id', 'CategoryController.destroy').middleware(['adminOnly', 'findCategory'])
 
+  // Posts
+  Route.post('posts', 'PostController.store').middleware(['adminOnly'])
+
   // Tags
-  Route.get('tag', 'TagController.index')
-  Route.post('tag', 'TagController.store').middleware(['adminOnly'])
-  Route.patch('tag/:id', 'TagController.update').middleware(['adminOnly', 'findTag'])
-  Route.delete('tag/:id', 'TagController.destroy').middleware(['adminOnly', 'findTag'])
+  Route.get('tags', 'TagController.index')
+  Route.post('tags', 'TagController.store').middleware(['adminOnly'])
+  Route.patch('tags/:id', 'TagController.update').middleware(['adminOnly', 'findTag'])
+  Route.delete('tags/:id', 'TagController.destroy').middleware(['adminOnly', 'findTag'])
 
 }).prefix('api')
 
