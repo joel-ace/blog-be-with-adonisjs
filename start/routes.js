@@ -18,8 +18,28 @@ const Route = use('Route')
 Route.group(() => {
   Route.resource('users', 'UserController')
     .apiOnly()
+    .middleware(new Map([
+      [['index', 'destroy'], ['adminOnly']],
+      [['destroy'], ['findUser']],
+      [['show', 'update'], ['isAdminOrUserOwn']],
+    ]))
 
+  // Category
+  Route.get('category', 'CategoryController.index')
+  Route.post('category', 'CategoryController.store').middleware(['adminOnly'])
+  Route.patch('category/:id', 'CategoryController.update').middleware(['adminOnly', 'findCategory'])
+  Route.delete('category/:id', 'CategoryController.destroy').middleware(['adminOnly', 'findCategory'])
+
+  // Authentication
   Route.post('auth/login', 'UserController.login')
-
+  Route.post('auth/verify-email/:token', 'UserController.verifyEmail')
+  Route.post('auth/change-password/:id', 'UserController.updatePassword')
+  Route.post('auth/forgot-password', 'UserController.forgotPassword')
+  Route.post('auth/reset-password/:token', 'UserController.updatePasswordByToken')
 }).prefix('api')
+
+//Just to test email template views
+//DELETE WHEN DONE
+Route.get('temp', ({ view }) => view.render('email.passwordchanged'))
+
 

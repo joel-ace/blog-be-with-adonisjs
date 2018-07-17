@@ -9,4 +9,16 @@ hooks.after.providersBooted(() => {
     })
   })
 
+  Exception.handle('InvalidTokenException', async (error, { response }) => {
+    return response.status(400).json({
+      message: 'The provided token is invalid or expired'
+    })
+  })
+
+  Exception.handle('ValidationException', async (error, { response }) => {
+    return response.status(400).json({
+      message: error
+    })
+  })
+
 })
