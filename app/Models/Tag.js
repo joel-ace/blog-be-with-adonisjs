@@ -2,7 +2,7 @@
 
 const Model = use('Model')
 
-class Category extends Model {
+class Tag extends Model {
   static boot () {
     super.boot()
 
@@ -15,9 +15,9 @@ class Category extends Model {
     })
   }
 
-  posts () {
-    return this.hasMany('App/Models/Post')
+  setTitle (title) {
+    return title.toLowerCase()
   }
 }
 
-module.exports = Category
+module.exports = Tag
