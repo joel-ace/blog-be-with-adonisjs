@@ -5,12 +5,23 @@ const Category = use('App/Models/Category')
 const HelperService = use('App/Services/HelperService')
 
 class PostController {
-  async index () {
+  async index ({ request }) {
+    const userAccountType = request.post().userAccountType
+
+    const page = parseInt(request.get().page)
+    const limit = parseInt(request.get().limit)
+
+    if (userAccountType == 'admin') {
+      const posts = await Post.query().listPostAdmin().paginate(page || 1, limit || 20)
+      return posts
+    }
+
+    const posts = await Post.query().listPost().paginate(page || 1, limit || 20)
+    return posts
   }
 
   async store ({ request, response }) {
     const user = request.post().adminUser
-    console.log(user)
 
     const { title, body, type, category_id, featured_image, featured, status } = request.all()
 

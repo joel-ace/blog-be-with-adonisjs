@@ -37,6 +37,7 @@ Route.group(() => {
   Route.delete('category/:id', 'CategoryController.destroy').middleware(['adminOnly', 'findCategory'])
 
   // Posts
+  Route.get('posts', 'PostController.index').middleware(['checkUserType'])
   Route.post('posts', 'PostController.store').middleware(['adminOnly'])
 
   // Tags

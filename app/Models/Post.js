@@ -22,6 +22,26 @@ class Post extends Model {
   category () {
     return this.belongsTo('App/Models/Category')
   }
+
+  static scopeListPostAdmin (query) {
+    return query
+      .with('user', (builder) => {
+        builder.select(['id', 'full_name'])
+      })
+      .with('category', (builder) => {
+        builder.select(['id', 'title', 'slug'])
+      })
+  }
+  static scopeListPost (query) {
+    return query
+      .where('status', '=', 1)
+      .with('user', (builder) => {
+        builder.select(['id', 'full_name'])
+      })
+      .with('category', (builder) => {
+        builder.select(['id', 'title', 'slug'])
+      })
+  }
 }
 
 module.exports = Post

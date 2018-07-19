@@ -40,6 +40,7 @@ const namedMiddleware = {
   findTag: 'App/Middleware/FindTag',
   findUser: 'App/Middleware/FindUSer',
   isAdminOrUserOwn: 'App/Middleware/IsAdminOrUserOwn',
+  checkUserType: 'App/Middleware/CheckUserType',
 }
 
 /*
