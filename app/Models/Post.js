@@ -36,7 +36,10 @@ class Post extends Model {
       })
   }
 
-  static scopeListPostById (query, column, value) {
+  static scopeShowPostByIdOrSlug (query, userAccountType, column, value) {
+    if (userAccountType !== 'admin') {
+      query.where('status', '=', 1)
+    }
     return query
       .where(column, '=', value)
       .with('user', (builder) => {

@@ -41,6 +41,8 @@ Route.group(() => {
   Route.get('posts/slug/:slug', 'PostController.show').middleware(['checkUserType', 'findPost'])
   Route.get('posts/:id', 'PostController.show').middleware(['checkUserType', 'findPost'])
   Route.post('posts', 'PostController.store').middleware(['adminOnly'])
+  Route.delete('posts/slug/:slug', 'PostController.destroy').middleware(['adminOnly', 'findPost'])
+  Route.delete('posts/:id', 'PostController.destroy').middleware(['adminOnly', 'findPost'])
 
   // Tags
   Route.get('tags', 'TagController.index')
