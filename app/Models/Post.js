@@ -23,7 +23,10 @@ class Post extends Model {
     return this.belongsTo('App/Models/Category')
   }
 
-  static scopeListPostAdmin (query) {
+  static scopeListPost (query, userAccountType) {
+    if (userAccountType !== 'admin') {
+      query.where('status', '=', 1)
+    }
     return query
       .with('user', (builder) => {
         builder.select(['id', 'full_name'])
@@ -32,9 +35,10 @@ class Post extends Model {
         builder.select(['id', 'title', 'slug'])
       })
   }
-  static scopeListPost (query) {
+
+  static scopeListPostById (query, column, value) {
     return query
-      .where('status', '=', 1)
+      .where(column, '=', value)
       .with('user', (builder) => {
         builder.select(['id', 'full_name'])
       })

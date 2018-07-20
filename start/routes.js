@@ -38,6 +38,8 @@ Route.group(() => {
 
   // Posts
   Route.get('posts', 'PostController.index').middleware(['checkUserType'])
+  Route.get('posts/slug/:slug', 'PostController.show').middleware(['checkUserType', 'findPost'])
+  Route.get('posts/:id', 'PostController.show').middleware(['checkUserType', 'findPost'])
   Route.post('posts', 'PostController.store').middleware(['adminOnly'])
 
   // Tags

@@ -11,13 +11,7 @@ class PostController {
     const page = parseInt(request.get().page)
     const limit = parseInt(request.get().limit)
 
-    if (userAccountType == 'admin') {
-      const posts = await Post.query().listPostAdmin().paginate(page || 1, limit || 20)
-      return posts
-    }
-
-    const posts = await Post.query().listPost().paginate(page || 1, limit || 20)
-    return posts
+    return await Post.query().listPost(userAccountType).paginate(page || 1, limit || 20)
   }
 
   async store ({ request, response }) {
@@ -54,7 +48,10 @@ class PostController {
     return { post }
   }
 
-  async show () {
+  async show ({ request }) {
+    const post = request.post().post
+
+    return post
   }
 
   async update () {
