@@ -57,7 +57,15 @@ class PostController {
   async update () {
   }
 
-  async destroy () {
+  async destroy ({ request }) {
+    const post = request.post().post
+
+    await post.delete();
+
+    return {
+      post,
+      message: 'post deleted successfully'
+    };
   }
 }
 
