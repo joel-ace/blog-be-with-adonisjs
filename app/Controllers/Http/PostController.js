@@ -54,7 +54,37 @@ class PostController {
     return post
   }
 
-  async update () {
+  async update ({ request, response }) {
+    const post = request.post().post
+    const user = request.post().adminUser
+
+    const { title, body, type, category_id, featured_image, featured, status } = request.all()
+
+    const validationRules = {
+      title: 'required|min:3',
+      body: 'required',
+      type: 'required|in:page,post',
+      featured: 'integer|under:2',
+      category_id: 'integer',
+      status: 'integer|under:2',
+    }
+
+    await HelperService.validateInput(validationRules, request.all(), response)
+
+    const category = await Category.find(category_id)
+    HelperService.handleResourceNotExist(category, 'category_id provided does not exist or has been previously deleted')
+
+    post.title = title
+    post.body = body
+    post.category_id = category.id
+    post.featured_image = featured_image
+    post.featured = featured
+    post.status = status
+    post.last_modified_by = user.id
+
+    await post.save(post)
+
+    return { post }
   }
 
   async destroy ({ request }) {
