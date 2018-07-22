@@ -42,6 +42,7 @@ const namedMiddleware = {
   isAdminOrUserOwn: 'App/Middleware/IsAdminOrUserOwn',
   checkUserType: 'App/Middleware/CheckUserType',
   findPost: 'App/Middleware/FindPost',
+  findComment: 'App/Middleware/FindComment',
 }
 
 /*
