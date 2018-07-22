@@ -23,6 +23,10 @@ class Post extends Model {
     return this.belongsTo('App/Models/Category')
   }
 
+  comments () {
+    return this.hasMany('App/Models/Comment')
+  }
+
   static scopeListPost (query, userAccountType) {
     if (userAccountType !== 'admin') {
       query.where('status', '=', 1)
@@ -34,6 +38,7 @@ class Post extends Model {
       .with('category', (builder) => {
         builder.select(['id', 'title', 'slug'])
       })
+      .withCount('comments as total_comments')
   }
 
   static scopeShowPostByIdOrSlug (query, userAccountType, column, value) {
@@ -48,6 +53,7 @@ class Post extends Model {
       .with('category', (builder) => {
         builder.select(['id', 'title', 'slug'])
       })
+      .withCount('comments as total_comments')
   }
 }
 

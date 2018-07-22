@@ -37,6 +37,10 @@ class User extends Model {
     return this.hasMany('App/Models/Token')
   }
 
+  comments () {
+    return this.hasMany('App/Models/Comment')
+  }
+
   setEmail (email) {
     return email.toLowerCase()
   }
