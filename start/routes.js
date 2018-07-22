@@ -47,6 +47,8 @@ Route.group(() => {
   Route.delete('posts/:id', 'PostController.destroy').middleware(['adminOnly', 'findPost'])
 
   //Post Comments
+  Route.get('posts/slug/:slug/comments', 'CommentController.index').middleware(['checkUserType', 'findPost'])
+  Route.get('posts/:id/comments', 'CommentController.index').middleware(['checkUserType', 'findPost'])
   Route.post('posts/slug/:slug/comments', 'CommentController.store').middleware(['auth', 'findPost'])
   Route.post('posts/:id/comments', 'CommentController.store').middleware(['auth', 'findPost'])
   Route.delete('comments/:id', 'CommentController.destroy').middleware(['adminOnly', 'findComment'])
