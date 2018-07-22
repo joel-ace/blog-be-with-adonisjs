@@ -11,6 +11,15 @@ class Comment extends Model {
     return this.belongsTo('App/Models/User')
   }
 
+  static scopeGetSingleComment (query, userAccountType, value) {
+    if (userAccountType !== 'admin') {
+      query.where('status', '=', 1)
+    }
+    return query
+      .where('id', '=', value)
+  }
+
+
 }
 
 module.exports = Comment
