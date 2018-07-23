@@ -4,7 +4,13 @@ const HelperService = use('App/Services/HelperService')
 const Comment = use('App/Models/Comment')
 
 class CommentController {
-  async index () {
+  async index ({ request }) {
+    const post = request.post().post
+
+    const page = parseInt(request.get().page)
+    const limit = parseInt(request.get().limit)
+
+    return await post.comments().paginate(page || 1, limit || 20)
   }
 
   async store ({ request, response, auth }) {
