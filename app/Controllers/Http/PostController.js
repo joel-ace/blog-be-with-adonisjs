@@ -17,7 +17,7 @@ class PostController {
   async store ({ request, response }) {
     const user = request.post().adminUser
 
-    const { title, body, type, category_id, featured_image, featured, status } = request.all()
+    const { title, body, type, category_id, featured_image, featured, status, tags } = request.all()
 
     const validationRules = {
       title: 'required|min:3',
@@ -35,15 +35,20 @@ class PostController {
     const category = await Category.find(category_id)
     HelperService.handleResourceNotExist(category, 'category_id provided does not exist or has been previously deleted')
 
-    post.title = title
-    post.body = body
-    post.type = type
-    post.category_id = category.id
-    post.featured_image = featured_image
-    post.featured = featured
-    post.status = status
+    post.title = title || post.title
+    post.body = body || post.body
+    post.type = type || post.type
+    post.category_id = category.id || post.category_id
+    post.featured_image = featured_image || post.featured_image
+    post.featured = featured || post.featured
+    post.status = status || post.status
 
     await user.posts().save(post)
+
+    if (tags && tags.length > 0) {
+      await post.tags().attach(tags)
+      post.tags = await post.tags().fetch()
+    }
 
     return { post }
   }
@@ -58,7 +63,7 @@ class PostController {
     const post = request.post().post
     const user = request.post().adminUser
 
-    const { title, body, category_id, featured_image, featured, status } = request.all()
+    const { title, body, category_id, featured_image, featured, status, tags } = request.all()
 
     const validationRules = {
       title: 'required|min:3',
@@ -73,15 +78,21 @@ class PostController {
     const category = await Category.find(category_id)
     HelperService.handleResourceNotExist(category, 'category_id provided does not exist or has been previously deleted')
 
-    post.title = title
-    post.body = body
-    post.category_id = category.id
-    post.featured_image = featured_image
-    post.featured = featured
-    post.status = status
-    post.last_modified_by = user.id
+    post.title = title || post.title
+    post.body = body || post.body
+    post.category_id = category.id || post.category_id
+    post.featured_image = featured_image || post.featured_image
+    post.featured = featured || post.featured
+    post.status = status || post.status
+    post.last_modified_by = user.id || post.last_modified_by
 
     await post.save(post)
+
+    if (tags && tags.length > 0) {
+      await post.tags().detach()
+      await post.tags().attach(tags)
+      post.tags = await post.tags().fetch()
+    }
 
     return { post }
   }

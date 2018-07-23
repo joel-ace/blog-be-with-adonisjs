@@ -27,6 +27,10 @@ class Post extends Model {
     return this.hasMany('App/Models/Comment')
   }
 
+  tags () {
+    return this.belongsToMany('App/Models/Tag')
+  }
+
   static scopeListPost (query, userAccountType) {
     if (userAccountType !== 'admin') {
       query.where('status', '=', 1)
