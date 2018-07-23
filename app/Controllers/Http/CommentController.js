@@ -6,11 +6,15 @@ const Comment = use('App/Models/Comment')
 class CommentController {
   async index ({ request }) {
     const post = request.post().post
+    const userType = request.post().userAccountType
 
     const page = parseInt(request.get().page)
     const limit = parseInt(request.get().limit)
 
-    return await post.comments().paginate(page || 1, limit || 20)
+    if (userType === 'admin') {
+      return await post.comments().paginate(page || 1, limit || 20)
+    }
+    return await post.comments().where('status', '=', 1).paginate(page || 1, limit || 20)
   }
 
   async store ({ request, response, auth }) {
@@ -31,6 +35,17 @@ class CommentController {
     await newComment.post().associate(post)
 
     return newComment
+  }
+
+  async update({ request }) {
+    const comment = request.post().comment
+
+    const newCommentStatus = comment.status ? false : true
+    comment.status = newCommentStatus
+
+    await comment.save(comment)
+
+    return comment
   }
 
   async destroy ({ request }) {

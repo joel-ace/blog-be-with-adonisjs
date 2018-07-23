@@ -11,12 +11,12 @@ class PostSchema extends Schema {
       table.integer('user_id').unsigned().references('id').inTable('users')
       table.integer('category_id').nullable().unsigned().references('id').inTable('categories')
       table.enum('type', ['post', 'page']).defaultTo('post')
-      table.string('featured_image', 70).nullable();
-      table.boolean('featured').defaultTo(0).nullable();
-      table.boolean('status').defaultTo(0);
-      table.integer('last_modified_by').nullable();
-      table.timestamp('featured_date').nullable();
-      table.string('slug');
+      table.string('featured_image', 70).nullable()
+      table.boolean('featured').defaultTo(0).nullable()
+      table.boolean('status').defaultTo(0)
+      table.integer('last_modified_by').nullable()
+      table.timestamp('featured_date').nullable()
+      table.string('slug')
       table.timestamps()
     })
   }
