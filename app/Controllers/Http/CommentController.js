@@ -27,7 +27,14 @@ class CommentController {
     return newComment
   }
 
-  async destroy () {
+  async destroy ({ request }) {
+    const comment = request.post().comment
+
+    await comment.delete();
+
+    return {
+      message: 'comment deleted successfully'
+    };
 
   }
 }

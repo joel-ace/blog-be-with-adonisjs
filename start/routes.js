@@ -49,6 +49,7 @@ Route.group(() => {
   //Post Comments
   Route.post('posts/slug/:slug/comments', 'CommentController.store').middleware(['auth', 'findPost'])
   Route.post('posts/:id/comments', 'CommentController.store').middleware(['auth', 'findPost'])
+  Route.delete('comments/:id', 'CommentController.destroy').middleware(['adminOnly', 'findComment'])
 
 
   // Tags
