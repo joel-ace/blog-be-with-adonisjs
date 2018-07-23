@@ -46,6 +46,11 @@ Route.group(() => {
   Route.delete('posts/slug/:slug', 'PostController.destroy').middleware(['adminOnly', 'findPost'])
   Route.delete('posts/:id', 'PostController.destroy').middleware(['adminOnly', 'findPost'])
 
+  //Post Comments
+  Route.post('posts/slug/:slug/comments', 'CommentController.store').middleware(['auth', 'findPost'])
+  Route.post('posts/:id/comments', 'CommentController.store').middleware(['auth', 'findPost'])
+
+
   // Tags
   Route.get('tags', 'TagController.index')
   Route.post('tags', 'TagController.store').middleware(['adminOnly'])

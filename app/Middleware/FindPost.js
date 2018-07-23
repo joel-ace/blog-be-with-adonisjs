@@ -4,8 +4,9 @@ const Post = use('App/Models/Post')
 const HelperService = use('App/Services/HelperService')
 
 class FindPost {
-  async handle ({ request, response, params }, next) {
-    const userAccountType = request.post().userAccountType || request.post().adminUser.account_type
+  async handle ({ request, response, params, auth }, next) {
+    const accountType = request.post().adminUser ? request.post().adminUser.account_type : auth.user.account_type
+    const userAccountType = request.post().userAccountType || accountType
     let post
 
     if (params.id) {

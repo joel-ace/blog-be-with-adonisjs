@@ -58,12 +58,11 @@ class PostController {
     const post = request.post().post
     const user = request.post().adminUser
 
-    const { title, body, type, category_id, featured_image, featured, status } = request.all()
+    const { title, body, category_id, featured_image, featured, status } = request.all()
 
     const validationRules = {
       title: 'required|min:3',
       body: 'required',
-      type: 'required|in:page,post',
       featured: 'integer|under:2',
       category_id: 'integer',
       status: 'integer|under:2',
