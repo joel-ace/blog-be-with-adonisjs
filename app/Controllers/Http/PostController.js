@@ -8,10 +8,11 @@ class PostController {
   async index ({ request }) {
     const userAccountType = request.post().userAccountType
 
-    const page = parseInt(request.get().page)
-    const limit = parseInt(request.get().limit)
+    const { page, limit, type, featured, category, status } = request.get()
 
-    return await Post.query().listPost(userAccountType).paginate(page || 1, limit || 20)
+    return await Post.query()
+      .listPost(userAccountType, type, featured, category, status)
+      .paginate(parseInt(page) || 1, parseInt(limit) || 20)
   }
 
   async store ({ request, response }) {
@@ -75,7 +76,7 @@ class PostController {
 
     await HelperService.validateInput(validationRules, request.all(), response)
 
-    const category = await Category.find(category_id)
+    const category = await Category.find(category_id || post.category_id)
     HelperService.handleResourceNotExist(category, 'category_id provided does not exist or has been previously deleted')
 
     post.title = title || post.title

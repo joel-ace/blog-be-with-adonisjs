@@ -14,7 +14,7 @@ class PostSchema extends Schema {
       table.string('featured_image', 70).nullable()
       table.boolean('featured').defaultTo(0).nullable()
       table.boolean('status').defaultTo(0)
-      table.integer('last_modified_by').nullable()
+      table.integer('last_modified_by').nullable().unsigned().references('id').inTable('users')
       table.timestamp('featured_date').nullable()
       table.string('slug')
       table.timestamps()
