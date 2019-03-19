@@ -15,21 +15,12 @@ class PostController {
       .paginate(parseInt(page) || 1, parseInt(limit) || 20)
   }
 
-  async store ({ request, response }) {
+  async store ({ request }) {
     const user = request.post().adminUser
 
     const { title, body, type, category_id, featured_image, featured, status, tags } = request.all()
 
-    const validationRules = {
-      title: 'required|min:3',
-      body: 'required',
-      type: 'required|in:page,post',
-      featured: 'integer|under:2',
-      category_id: 'integer',
-      status: 'integer|under:2',
-    }
-
-    await HelperService.validateInput(validationRules, request.all(), response)
+    await HelperService.validateInput(Post.rules.store, request.all(), Post.messages)
 
     const post = new Post()
 
@@ -66,15 +57,7 @@ class PostController {
 
     const { title, body, category_id, featured_image, featured, status, tags } = request.all()
 
-    const validationRules = {
-      title: 'required|min:3',
-      body: 'required',
-      featured: 'integer|under:2',
-      category_id: 'integer',
-      status: 'integer|under:2',
-    }
-
-    await HelperService.validateInput(validationRules, request.all(), response)
+    await HelperService.validateInput(Post.rules.update, request.all(), Post.messages)
 
     const category = await Category.find(category_id || post.category_id)
     HelperService.handleResourceNotExist(category, 'category_id provided does not exist or has been previously deleted')

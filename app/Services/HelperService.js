@@ -44,11 +44,12 @@ class HelperService {
     }
   }
 
-  async validateInput(validationRules, validationFields, response) {
-    const validation = await validateAll(validationFields, validationRules)
+  async validateInput(validationRules, validationFields, messages = null) {
+    const validation = await validateAll(validationFields, validationRules, messages)
 
     if(validation.fails()) {
-      throw new ValidationErrorException(validation.messages())
+      // throw new ValidationErrorException(validation.messages())
+      throw new ValidationErrorException(validation.messages().map(messages => messages.message))
     }
   }
 

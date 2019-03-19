@@ -4,12 +4,8 @@ const User = use('App/Models/User')
 const HelperService = use('App/Services/HelperService')
 
 class IsAdminOrUserOwn {
-  async handle ({ request, response, auth, params }, next) {
-    const validationRules = {
-      id: 'required|integer',
-    }
-
-    await HelperService.validateInput(validationRules, parseInt(params.id), response)
+  async handle ({ request, auth, params }, next) {
+    await HelperService.validateInput(User.rules.find, parseInt(params.id), User.messages)
 
     const currentUser = await auth.getUser();
     const user = await User.find(params.id);

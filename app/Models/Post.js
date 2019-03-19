@@ -15,6 +15,44 @@ class Post extends Model {
     })
   }
 
+  static get rules () {
+    return {
+      store: {
+        title: 'required|min:3',
+        body: 'required',
+        type: 'required|in:page,post',
+        featured: 'integer|under:2',
+        category_id: 'integer',
+        status: 'integer|under:2',
+      },
+      find :{
+        id: 'required|integer',
+      },
+      update: {
+        title: 'required|min:3',
+        body: 'required',
+        featured: 'integer|under:2',
+        category_id: 'integer',
+        status: 'integer|under:2',
+      }
+    }
+  }
+
+  static get messages () {
+    return {
+      'title.required': 'title is required',
+      'title.min': 'title should be a minimum of {{argument.0}} characters long',
+      'body.required': 'body is required',
+      'type.required': 'type is required',
+      'type.in': 'type should be one of {{argument}}',
+      'featured.under': 'featured must be less than {{argument.0}}',
+      'featured.integer': 'featured must be an integer',
+      'category_id.integer': 'category id must be an integer',
+      'status.integer': 'status is required',
+      'status.under': 'status must be less than {{argument.0}}',
+    }
+  }
+
   user () {
     return this.belongsTo('App/Models/User')
   }

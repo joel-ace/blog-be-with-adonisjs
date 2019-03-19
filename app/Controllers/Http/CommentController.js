@@ -17,16 +17,12 @@ class CommentController {
     return await post.comments().where('status', '=', 1).paginate(page || 1, limit || 20)
   }
 
-  async store ({ request, response, auth }) {
+  async store ({ request, auth }) {
     const { comment } = request.only('comment')
     const user = auth.user
     const post = request.post().post
 
-    const validationRules = {
-      comment: 'required|max:500',
-    }
-
-    await HelperService.validateInput(validationRules, comment, response)
+    await HelperService.validateInput(Comment.rules.store, comment, Comment.messages)
 
     const newComment = new Comment()
     newComment.user_id = user.id

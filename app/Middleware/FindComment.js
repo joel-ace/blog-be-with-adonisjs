@@ -4,12 +4,8 @@ const Comment = use('App/Models/Comment')
 const HelperService = use('App/Services/HelperService')
 
 class FindComment {
-  async handle ({ request, params, auth, response }, next) {
-    const validationRules = {
-      id: 'required|integer',
-    }
-
-    await HelperService.validateInput(validationRules, parseInt(params.id), response)
+  async handle ({ request, params, auth }, next) {
+    await HelperService.validateInput(Comment.rules.find, parseInt(params.id), Comment.messages)
 
     const user = request.post().adminUser ? request.post().adminUser : auth.user
     const userAccountType = request.post().userAccountType || user.account_type
