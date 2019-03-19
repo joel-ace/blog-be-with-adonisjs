@@ -4,13 +4,8 @@ const Tag = use('App/Models/Tag')
 const HelperService = use('App/Services/HelperService')
 
 class FindTag {
-  async handle ({ request, response, params }, next) {
-
-    const validationRules = {
-      id: 'required|integer',
-    }
-
-    await HelperService.validateInput(validationRules, parseInt(params.id), response)
+  async handle ({ request, params }, next) {
+    await HelperService.validateInput(Tag.rules.find, parseInt(params.id), Tag.messages)
 
     const tag = await Tag.find(params.id);
     HelperService.handleResourceNotExist(tag, 'tag does not exist or has been previously deleted')

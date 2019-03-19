@@ -10,14 +10,10 @@ class CategoryController {
     return { categories }
   }
 
-  async store ({ request, response }) {
+  async store ({ request }) {
     const { title, description } = request.all()
 
-    const validationRules = {
-      title: 'required|min:3',
-    }
-
-    await HelperService.validateInput(validationRules, request.all(), response)
+    await HelperService.validateInput(Category.rules.store, request.all(), Category.messages)
 
     const newCategory = await Category.findBy('title', title)
     HelperService.resourceExists(newCategory, 'a category with this title already exists')
@@ -26,12 +22,8 @@ class CategoryController {
     return { category }
   }
 
-  async update ({ request, response }) {
-    const validationRules = {
-      title: 'required|min:3',
-    }
-
-    await HelperService.validateInput(validationRules, request.all(), response)
+  async update ({ request }) {
+    await HelperService.validateInput(Category.rules.store, request.all(), Category.messages)
 
     const title = request.only('title')
 
@@ -45,19 +37,17 @@ class CategoryController {
 
     return {
       category,
-      message: 'category successfully updated',
     }
   }
 
   async destroy ({ request }) {
     const category = request.post().category
 
-    await category.delete();
+    await category.delete()
 
     return {
       category,
-      message: 'category deleted successfully'
-    };
+    }
   }
 }
 

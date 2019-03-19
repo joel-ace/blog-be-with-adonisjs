@@ -10,14 +10,10 @@ class TagController {
     return { tags }
   }
 
-  async store ({ request, response }) {
+  async store ({ request }) {
     const { title } = request.all()
 
-    const validationRules = {
-      title: 'required|min:3',
-    }
-
-    await HelperService.validateInput(validationRules, request.all(), response)
+    await HelperService.validateInput(Tag.rules.store, request.all(), Tag.messages)
 
     const newTag = await Tag.findBy('title', title)
     HelperService.resourceExists(newTag, 'tag already exists')
@@ -26,12 +22,8 @@ class TagController {
     return { tag }
   }
 
-  async update ({ request, response }) {
-    const validationRules = {
-      title: 'required|min:3',
-    }
-
-    await HelperService.validateInput(validationRules, request.all(), response)
+  async update ({ request }) {
+    await HelperService.validateInput(Tag.rules.store, request.all(), Tag.messages)
 
     const title = request.only('title')
 

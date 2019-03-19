@@ -10,7 +10,6 @@ class AdminOnly {
 
     request.body.adminUser = user
 
-    // call next to advance the request
     await next()
   }
 }

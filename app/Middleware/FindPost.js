@@ -10,11 +10,7 @@ class FindPost {
     let post
 
     if (params.id) {
-      const validationRules = {
-        id: 'required|integer',
-      }
-
-      await HelperService.validateInput(validationRules, parseInt(params.id), response)
+      await HelperService.validateInput(Post.rules.find, parseInt(params.id), Post.mesages)
       post = await Post.query().showPostByIdOrSlug(userAccountType,'id', params.id).first()
     } else {
       post = await Post.query().showPostByIdOrSlug(userAccountType,'slug', params.slug).first()
